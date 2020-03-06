@@ -11,8 +11,8 @@
                 auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-form-item style="width: 100%">
-      <el-button class="login_btn" type="primary" v-on:click="login">登录</el-button>
-      <el-button class="signup_btn" type="primary" v-on:click="login">注册</el-button>
+      <el-button class="btn" type="primary" v-on:click="login">登录</el-button>
+      <el-button class="btn" type="primary" v-on:click="login">注册</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -31,6 +31,7 @@ export default {
   },
   methods: {
     login () {
+      let _this = this
       this.$axios
         .post('/login', {
           username: this.loginForm.username,
@@ -38,6 +39,7 @@ export default {
         })
         .then(successResponse => {
           if (successResponse.data.code === 200) {
+            _this.$store.commit('login', _this.loginForm)
             this.$router.replace({path: '/index'})
           } else {
             alert('用户名或密码错误！')
@@ -69,7 +71,7 @@ export default {
   color: #505458;
 }
 
-.login_btn, .signup_btn {
+.btn {
   width: 30%;
   background: #505458;
   border: none;
