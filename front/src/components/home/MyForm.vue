@@ -1,13 +1,12 @@
 <template>
-    <div></div>
+  <div></div>
 </template>
 
 <script>
     export default {
-        name: 'AppIndex'
+        name: 'MyForm'
     }
 </script>
 
 <style scoped>
-
 </style>

@@ -1,8 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import AppIndex from '@/components/home/AppIndex'
 import Login from '@/components/Login'
+import Home from '@/components/Home'
+
+import AppIndex from '@/components/home/AppIndex'
+import NewForm from '@/components/home/NewForm'
+import MyForm from '@/components/home/MyForm'
+import Account from '@/components/home/Account'
 
 Vue.use(Router)
 
@@ -15,9 +20,32 @@ export default new Router({
       component: Login
     },
     {
-      path: '/index',
-      name: 'AppIndex',
-      component: AppIndex
+      path: 'home',
+      name: 'Home',
+      component: Home,
+      redirect: '/index',
+      children: [
+        {
+          path: '/index',
+          name: 'AppIndex',
+          component: AppIndex
+        },
+        {
+          path: '/newform',
+          name: 'NewForm',
+          component: NewForm
+        },
+        {
+          path: '/myform',
+          name: 'MyForm',
+          component: MyForm
+        },
+        {
+          path: '/account',
+          name: 'Account',
+          component: Account
+        }
+      ]
     }
   ]
 })

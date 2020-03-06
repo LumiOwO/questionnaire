@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     login () {
-      let _this = this
       this.$axios
         .post('/login', {
           username: this.loginForm.username,
@@ -39,7 +38,7 @@ export default {
         })
         .then(successResponse => {
           if (successResponse.data.code === 200) {
-            _this.$store.commit('login', _this.loginForm)
+            this.$store.commit('login', this.loginForm)
             this.$router.replace({path: '/index'})
           } else {
             alert('用户名或密码错误！')
