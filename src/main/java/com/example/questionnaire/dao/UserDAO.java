@@ -8,4 +8,6 @@ public interface UserDAO extends JpaRepository<User, Long> {
 	// JpaRepository会自动生成对应的SQL语句
 
 	User getByEmailAndPassword(String email, String password);
+
+	User getByEmail(String email);
 }

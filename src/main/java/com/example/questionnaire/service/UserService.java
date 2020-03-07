@@ -21,4 +21,8 @@ public class UserService {
 	public void signup(User user) {
 		userDAO.save(user);
 	}
+
+	public boolean exists(String email) {
+		return userDAO.getByEmail(email) != null;
+	}
 }

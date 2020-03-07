@@ -11,8 +11,8 @@
       {{ item.navItem }}
     </el-menu-item>
     <span class="welcome_title">调查问卷系统</span>
-    <span class="welcome_username" >欢迎您，admin！</span>
-    <el-button class="quit_btn" type="primary" v-on:click="exit">退出</el-button>
+    <span class="welcome_username" >欢迎您，{{username}}！</span>
+    <el-button class="quit_btn" type="primary" v-on:click="logout">退出</el-button>
   </el-menu>
 </template>
 
@@ -25,11 +25,12 @@
           {name: '/newform', navItem: '新建表单'},
           {name: '/myform', navItem: '我的表单'},
           {name: '/account', navItem: '账户管理'}
-        ]
+        ],
+        username: JSON.parse(window.localStorage.getItem('user')).username
       }
     },
     methods: {
-      exit () {
+      logout () {
         this.$store.commit('logout')
         this.$router.replace({path: '/login'})
       }
@@ -37,7 +38,7 @@
   }
 </script>
 
-<style scoped>
+<style>
 .menu {
   margin-top: -20px;
   min-width: 1300px;

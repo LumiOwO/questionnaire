@@ -9,35 +9,32 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.util.HtmlUtils;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.Valid;
 
 @Controller
-public class LoginController {
+public class SignupController {
 
 	private final UserService userService;
 
 	@Autowired
-	public LoginController(UserService userService) {
+	public SignupController(UserService userService) {
 		this.userService = userService;
 	}
 
 	@CrossOrigin
-	@RequestMapping("/api/login")
+	@RequestMapping("/api/signup")
 	@ResponseBody
-	public UserResponse login(@RequestBody User requestUser) {
-		String email = HtmlUtils.htmlEscape(requestUser.getEmail());
-		User user = userService.getUser(email, requestUser.getPassword());
-
-		if(user != null) {
-			return new UserResponse.Builder(true)
-					.username(user.getUsername())
-					.build();
-		} else {
+	public UserResponse signup(@RequestBody @Valid User requestUser) {
+		if(userService.exists(requestUser.getEmail())) {
 			return new UserResponse.Builder(false)
-					.msg("用户名或密码错误")
+					.msg("该邮箱已被注册")
 					.build();
 		}
+
+		userService.signup(requestUser);
+		return new UserResponse.Builder(true)
+				.msg("注册成功")
+				.build();
 	}
 }
