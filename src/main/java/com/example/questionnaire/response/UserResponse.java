@@ -6,11 +6,13 @@ public class UserResponse implements MyResponse {
 
 	private String msg;
 	private String username;
+	private int uid;
 
 	private UserResponse(Builder builder) {
 		this.succeed = builder.succeed;
 		this.msg = builder.msg;
 		this.username = builder.username;
+		this.uid = builder.uid;
 	}
 
 	public boolean isSucceed() {
@@ -37,22 +39,26 @@ public class UserResponse implements MyResponse {
 		this.username = username;
 	}
 
+	public int getUid() {
+		return uid;
+	}
+
+	public void setUid(int uid) {
+		this.uid = uid;
+	}
+
 	public static class Builder {
 
 		private boolean succeed;
 
 		private String msg;
 		private String username;
+		private int uid;
 
 		public Builder(boolean succeed) {
 			this.succeed = succeed;
 			this.msg = succeed? "请求成功": "请求失败";
 			this.username = "";
-		}
-
-		public Builder succeed(boolean val) {
-			this.succeed = val;
-			return this;
 		}
 
 		public Builder msg(String val) {
@@ -62,6 +68,11 @@ public class UserResponse implements MyResponse {
 
 		public Builder username(String val) {
 			this.username = val;
+			return this;
+		}
+
+		public Builder uid(int val) {
+			this.uid = val;
 			return this;
 		}
 

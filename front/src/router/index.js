@@ -7,7 +7,6 @@ import Home from '@/components/Home'
 import AppIndex from '@/components/home/AppIndex'
 import NewForm from '@/components/home/NewForm'
 import MyForm from '@/components/home/MyForm'
-import Account from '@/components/home/Account'
 
 Vue.use(Router)
 
@@ -39,11 +38,6 @@ export default new Router({
           path: '/myform',
           name: 'MyForm',
           component: MyForm
-        },
-        {
-          path: '/account',
-          name: 'Account',
-          component: Account
         }
       ]
     }

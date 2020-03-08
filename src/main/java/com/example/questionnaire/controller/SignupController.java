@@ -26,15 +26,20 @@ public class SignupController {
 	@RequestMapping("/api/signup")
 	@ResponseBody
 	public UserResponse signup(@RequestBody @Valid User requestUser) {
-		if(userService.exists(requestUser.getEmail())) {
+		if(userService.emailExists(requestUser.getEmail())) {
 			return new UserResponse.Builder(false)
 					.msg("该邮箱已被注册")
 					.build();
-		}
 
-		userService.signup(requestUser);
-		return new UserResponse.Builder(true)
-				.msg("注册成功")
-				.build();
+		} else if(userService.usernameExists(requestUser.getUsername())) {
+			return new UserResponse.Builder(false)
+					.msg("该用户名已被注册")
+					.build();
+		} else {
+			userService.signup(requestUser);
+			return new UserResponse.Builder(true)
+					.msg("注册成功")
+					.build();
+		}
 	}
 }

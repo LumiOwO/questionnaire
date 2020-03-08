@@ -1,11 +1,11 @@
 <template>
-  <el-menu :default-active="'/index'"
+  <el-menu :default-active="this.$route.path"
     router
     class="menu"
     mode="horizontal"
     background-color="white"
     text-color="#222"
-    active-text-color="red">
+    active-text-color="#2e8fbc">
 
     <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name" style="min-width: 120px">
       {{ item.navItem }}
@@ -21,12 +21,11 @@
     data () {
       return {
         navList: [
-          {name: '/index', navItem: '首页'},
           {name: '/newform', navItem: '新建表单'},
           {name: '/myform', navItem: '我的表单'},
-          {name: '/account', navItem: '账户管理'}
+          {name: '/index', navItem: '个人中心'}
         ],
-        username: JSON.parse(window.localStorage.getItem('user')).username
+        username: JSON.parse(window.localStorage.getItem('userInfo')).username
       }
     },
     methods: {
@@ -47,7 +46,7 @@
 .welcome_title {
   position: absolute;
   padding-top: 17px;
-  right: 40%;
+  right: 44%;
   font-size: 20px;
   font-weight: bold;
   pointer-events: none;

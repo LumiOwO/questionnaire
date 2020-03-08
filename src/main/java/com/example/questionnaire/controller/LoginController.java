@@ -33,6 +33,7 @@ public class LoginController {
 		if(user != null) {
 			return new UserResponse.Builder(true)
 					.username(user.getUsername())
+					.uid(user.getId())
 					.build();
 		} else {
 			return new UserResponse.Builder(false)

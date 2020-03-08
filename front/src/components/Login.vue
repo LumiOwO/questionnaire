@@ -1,43 +1,45 @@
 <template>
-  <transition name="fade" mode="out-in">
-    <el-form v-if="!showSignupUI" key="login"
-             class="login-container" label-position="left" label-width="0px">
-      <h3 class="login_title">登录</h3>
-      <el-form-item>
-        <el-input type="text" v-model="userInfo.email" v-on:keyup.enter.native="login"
-                  auto-complete="off" placeholder="邮箱"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input type="password" v-model="userInfo.password" v-on:keyup.enter.native="login"
-                  auto-complete="off" placeholder="密码"></el-input>
-      </el-form-item>
-      <el-form-item style="width: 100%">
-        <el-button class="btn" type="primary" v-on:click="login">登录</el-button>
-        <el-button class="btn" type="primary" v-on:click="switchUI">注册</el-button>
-      </el-form-item>
-    </el-form>
+  <div>
+    <transition name="slide-up" mode="out-in" key="login-UI">
+      <el-form v-if="!showSignupUI" key="login"
+               class="login-container" label-position="left" label-width="0px">
+        <h3 class="login_title">登录</h3>
+        <el-form-item>
+          <el-input type="text" v-model="userInfo.email" v-on:keyup.enter.native="login"
+                    auto-complete="off" placeholder="邮箱"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="password" v-model="userInfo.password" v-on:keyup.enter.native="login"
+                    auto-complete="off" placeholder="密码"></el-input>
+        </el-form-item>
+        <el-form-item style="width: 100%">
+          <el-button class="btn" type="primary" v-on:click="login">登录</el-button>
+          <el-button class="btn" type="primary" v-on:click="switchUI">注册</el-button>
+        </el-form-item>
+      </el-form>
 
-    <el-form v-else key="signup"
-             class="login-container" label-position="left" label-width="0px">
-      <h3 class="login_title">注册</h3>
-      <el-form-item>
-        <el-input type="text" v-model="userInfo.email" v-on:keyup.enter.native="signup"
-                  auto-complete="off" placeholder="邮箱"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input type="text" v-model="userInfo.username" v-on:keyup.enter.native="signup"
-                  auto-complete="off" placeholder="昵称"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-input type="password" v-model="userInfo.password" v-on:keyup.enter.native="signup"
-                  auto-complete="off" placeholder="密码"></el-input>
-      </el-form-item>
-      <el-form-item style="width: 100%">
-        <el-button class="btn" type="primary" v-on:click="signup">确定</el-button>
-        <el-button class="btn" type="primary" v-on:click="switchUI">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </transition>
+      <el-form v-else key="signup"
+               class="login-container" label-position="left" label-width="0px">
+        <h3 class="login_title">注册</h3>
+        <el-form-item>
+          <el-input type="text" v-model="userInfo.email" v-on:keyup.enter.native="signup"
+                    auto-complete="off" placeholder="邮箱"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="text" v-model="userInfo.username" v-on:keyup.enter.native="signup"
+                    auto-complete="off" placeholder="昵称"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="password" v-model="userInfo.password" v-on:keyup.enter.native="signup"
+                    auto-complete="off" placeholder="密码"></el-input>
+        </el-form-item>
+        <el-form-item style="width: 100%">
+          <el-button class="btn" type="primary" v-on:click="signup">确定</el-button>
+          <el-button class="btn" type="primary" v-on:click="switchUI">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </transition>
+  </div>
 </template>
 
 <script>
@@ -62,7 +64,7 @@ export default {
         })
         .then(successResponse => {
           if (successResponse.data.succeed) {
-            this.$store.commit('login', successResponse.data.username)
+            this.$store.commit('login', successResponse.data)
             this.$router.replace({path: '/index'})
           } else {
             alert(successResponse.data.msg)
@@ -126,10 +128,10 @@ export default {
   margin: 10px 20px auto 20px;
 }
 
-.fade-enter-active, .fade-leave-active {
+.slide-up-enter-active, .slide-up-leave-active {
   transition: all .5s ease;
 }
-.fade-enter, .fade-leave-to{
+.slide-up-enter, .slide-up-leave-to{
   transform: translateY(-40px);
   opacity: 0;
 }

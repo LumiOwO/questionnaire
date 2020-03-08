@@ -1,20 +1,27 @@
 <template>
     <div>
       <nav-menu></nav-menu>
-      <router-view/>
+      <div>
+        <transition name="fade" mode="out-in">
+          <router-view/>
+        </transition>
+      </div>
     </div>
 </template>
 
 <script>
     import NavMenu from './common/NavMenu'
     export default {
-        name: 'Home',
-        components: {NavMenu}
+      name: 'Home',
+      components: {NavMenu}
     }
 </script>
 
 <style>
-body {
-  background: #F5F5F5;
+.fade-enter-active, .fade-leave-active {
+  transition: all .5s ease;
+}
+.fade-enter, .fade-leave-to{
+  opacity: 0;
 }
 </style>

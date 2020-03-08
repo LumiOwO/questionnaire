@@ -22,7 +22,11 @@ public class UserService {
 		userDAO.save(user);
 	}
 
-	public boolean exists(String email) {
+	public boolean emailExists(String email) {
 		return userDAO.getByEmail(email) != null;
+	}
+
+	public boolean usernameExists(String username) {
+		return userDAO.getByUsername(username) != null;
 	}
 }
