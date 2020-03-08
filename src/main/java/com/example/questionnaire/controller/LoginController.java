@@ -28,8 +28,16 @@ public class LoginController {
 	@ResponseBody
 	public UserResponse login(@RequestBody User requestUser) {
 		String email = HtmlUtils.htmlEscape(requestUser.getEmail());
+		if(email.isEmpty()) {
+			return new UserResponse.Builder(false)
+					.msg("邮箱不能为空")
+					.build();
+		} else if(!userService.emailExists(email)) {
+			return new UserResponse.Builder(false)
+					.msg("该邮箱未注册")
+					.build();
+		}
 		User user = userService.getUser(email, requestUser.getPassword());
-
 		if(user != null) {
 			return new UserResponse.Builder(true)
 					.username(user.getUsername())
@@ -37,7 +45,7 @@ public class LoginController {
 					.build();
 		} else {
 			return new UserResponse.Builder(false)
-					.msg("用户名或密码错误")
+					.msg("邮箱或密码有误，请重试")
 					.build();
 		}
 	}

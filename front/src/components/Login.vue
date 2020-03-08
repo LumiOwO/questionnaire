@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div v-if="!isMobile">
+    <!--PC端登录界面-->
     <transition name="slide-up" mode="out-in" key="login-UI">
       <el-form v-if="!showSignupUI" key="login"
                class="login-container" label-position="left" label-width="0px">
-        <h3 class="login_title">登录</h3>
+        <h3 class="login-title">登录</h3>
         <el-form-item>
           <el-input type="text" v-model="userInfo.email" v-on:keyup.enter.native="login"
                     auto-complete="off" placeholder="邮箱"></el-input>
@@ -40,9 +41,38 @@
       </el-form>
     </transition>
   </div>
+
+  <div v-else>
+    <!--移动端登录界面-->
+    <transition name="slide-up" mode="out-in" key="login-UI">
+      <div class="login-container-mobile" v-if="!showSignupUI" key="login-mobile">
+        <h2 class="login-title-mobile">登录</h2>
+        <mt-field type="text" v-model="userInfo.email"
+                  auto-complete="off" placeholder="邮箱"> </mt-field>
+        <mt-field type="password" v-model="userInfo.password"
+                  auto-complete="off" placeholder="密码"> </mt-field>
+        <mt-button class="btn-mobile" type="primary" v-on:click="login">登录</mt-button>
+        <mt-button class="btn-mobile" type="primary" v-on:click="switchUI">注册</mt-button>
+      </div>
+      <div class="login-container-mobile" v-else key="signup-mobile">
+        <h2 class="login-title-mobile">注册</h2>
+        <mt-field type="text" v-model="userInfo.email"
+                  auto-complete="off" placeholder="邮箱"> </mt-field>
+        <mt-field type="text" v-model="userInfo.username"
+                  auto-complete="off" placeholder="昵称"> </mt-field>
+        <mt-field type="password" v-model="userInfo.password"
+                  auto-complete="off" placeholder="密码"> </mt-field>
+        <mt-button class="btn-mobile" type="primary" v-on:click="signup">确定</mt-button>
+        <mt-button class="btn-mobile" type="primary" v-on:click="switchUI">取消</mt-button>
+      </div>
+      </transition>
+  </div>
 </template>
 
 <script>
+import App from '../App'
+import { MessageBox } from 'mint-ui'
+
 export default {
   name: 'Login',
   data () {
@@ -52,7 +82,8 @@ export default {
         password: '',
         email: ''
       },
-      showSignupUI: false
+      showSignupUI: false,
+      isMobile: App.methods._isMobile()
     }
   },
   methods: {
@@ -65,13 +96,17 @@ export default {
         .then(successResponse => {
           if (successResponse.data.succeed) {
             this.$store.commit('login', successResponse.data)
-            this.$router.replace({path: '/index'})
+            let path = this.$route.query.redirect
+            this.$router.replace({path:
+                path === '/' || path === undefined ? '/index' : path})
           } else {
-            alert(successResponse.data.msg)
+            this.alertError(successResponse.data.msg)
+              .catch(() => {})
           }
         })
         .catch(failResponse => {
-          alert('未知错误')
+          this.alertError('未知错误')
+            .catch(() => {})
         })
     },
     signup () {
@@ -82,13 +117,18 @@ export default {
           email: this.userInfo.email
         })
         .then(successResponse => {
-          alert(successResponse.data.msg)
           if (successResponse.data.succeed) {
-            this.switchUI()
+            this.alertInfo(successResponse.data.msg)
+              .then(() => { this.switchUI() })
+              .catch(() => {})
+          } else {
+            this.alertError(successResponse.data.msg)
+              .catch(() => {})
           }
         })
         .catch(failResponse => {
-          alert('未知错误')
+          this.alertError('未知错误')
+            .catch(() => {})
         })
     },
     switchUI () {
@@ -97,6 +137,30 @@ export default {
         username: '',
         password: '',
         email: ''
+      }
+    },
+    alertError (msg) {
+      if (!this.isMobile) {
+        // PC端
+        return this.$alert(msg, '错误', {
+          confirmButtonText: '确定',
+          type: 'error'
+        })
+      } else {
+        // 移动端
+        return MessageBox.alert(msg, '错误')
+      }
+    },
+    alertInfo (msg) {
+      if (!this.isMobile) {
+        // PC端
+        return this.$alert(msg, '提示', {
+          confirmButtonText: '确定',
+          type: 'info'
+        })
+      } else {
+        // 移动端
+        return MessageBox.alert(msg, '提示')
       }
     }
   }
@@ -115,8 +179,8 @@ export default {
   box-shadow: 0 0 25px #cac6c6;
 }
 
-.login_title {
-  margin: 0px auto 40px auto;
+.login-title {
+  margin: 0 auto 40px auto;
   text-align: center;
   color: #505458;
 }
@@ -126,6 +190,30 @@ export default {
   background: #505458;
   border: none;
   margin: 10px 20px auto 20px;
+}
+
+.login-container-mobile {
+  border-radius: 1rem;
+  background-clip: padding-box;
+  margin: 4rem auto;
+  width: 16.5rem;
+  padding: 2rem 2rem 1rem 2rem;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 1.5rem #cac6c6;
+}
+
+.login-title-mobile {
+  margin: 0 auto 2rem auto;
+  text-align: center;
+  color: #505458;
+}
+
+.btn-mobile {
+  width: 37%;
+  background: #505458;
+  border: none;
+  margin: 1.5rem 0.5rem 1rem 0.5rem;
 }
 
 .slide-up-enter-active, .slide-up-leave-active {
