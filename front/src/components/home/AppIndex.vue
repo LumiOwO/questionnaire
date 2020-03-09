@@ -1,15 +1,28 @@
 <template>
+  <div v-if="!isMobile">
+    <!--电脑端-->
     <el-form class="account-info">
       <el-form-item>
         <el-card>hahaha</el-card>
       </el-form-item>
     </el-form>
+  </div>
+
+  <div v-else>
+    <!--移动端-->
+  </div>
 </template>
 
 <script>
-    export default {
-        name: 'AppIndex'
+import App from '../../App'
+export default {
+  name: 'AppIndex',
+  data () {
+    return {
+      isMobile: App.methods._isMobile()
     }
+  }
+}
 </script>
 
 <style scoped>

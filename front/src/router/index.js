@@ -40,6 +40,11 @@ export default new Router({
           component: MyForm
         }
       ]
+    },
+    {
+      path: '*',
+      name: 'default',
+      redirect: '/index'
     }
   ]
 })

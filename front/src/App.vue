@@ -40,4 +40,13 @@ body {
   opacity: 0;
 }
 
+.el-button--primary{
+  color: #fff;
+  background: #505458;
+  border: none;
+}
+.el-scrollbar__wrap{
+  overflow-x: hidden;
+}
+
 </style>

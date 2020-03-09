@@ -1,26 +1,30 @@
 <template>
   <div>
-    <el-form class="new-form">
-      <el-form-item>
-        <el-card>newform</el-card>
-      </el-form-item>
-    </el-form>
+    <edit-form :form-data="newform"></edit-form>
   </div>
 </template>
 
 <script>
-    export default {
-        name: 'NewForm'
+import EditForm from '@/components/form/EditForm'
+export default {
+  name: 'NewForm',
+  components: {EditForm},
+  data () {
+    return {
+      newform: {
+        title: '',
+        questions: [],
+        onceOnly: false,
+        userOnly: false,
+        repeatDaily: false,
+        published: false,
+        dueDate: Date.now() + 24 * 3600 * 1000,
+        dueTime: Date.now() + 24 * 3600 * 1000
+      }
     }
+  }
+}
 </script>
 
 <style scoped>
-.new-form {
-  background-clip: padding-box;
-  margin: 15px auto;
-  min-height: 550px;
-  padding: 35px 35px 15px 35px;
-  background: #fff;
-  border: 1px solid #eaeaea;
-}
 </style>

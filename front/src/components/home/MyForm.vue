@@ -1,15 +1,28 @@
 <template>
-  <el-form class="my-form">
-    <el-form-item>
-      <el-card>myform</el-card>
-    </el-form-item>
-  </el-form>
+  <div v-if="!isMobile">
+    <!--电脑端-->
+    <el-form class="my-form">
+      <el-form-item>
+        <el-card>myform</el-card>
+      </el-form-item>
+    </el-form>
+  </div>
+
+  <div v-else>
+    <!--移动端-->
+  </div>
 </template>
 
 <script>
-    export default {
-        name: 'MyForm'
+import App from '../../App'
+export default {
+  name: 'MyForm',
+  data () {
+    return {
+      isMobile: App.methods._isMobile()
     }
+  }
+}
 </script>
 
 <style scoped>

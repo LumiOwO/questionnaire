@@ -49,7 +49,8 @@
   <div v-else>
     <!--移动端登录界面-->
     <transition name="slide-up" mode="out-in" key="login-UI">
-      <div class="login-container-mobile" v-if="!showSignupUI" key="login-mobile">
+      <div class="login-container-mobile" v-if="!showSignupUI" key="login-mobile"
+           v-loading="loading">
         <h2 class="login-title-mobile">登录</h2>
         <mt-field type="text" v-model="userInfo.email"
                   auto-complete="off" placeholder="邮箱"> </mt-field>
@@ -58,7 +59,8 @@
         <mt-button class="btn-mobile" type="primary" v-on:click="login">登录</mt-button>
         <mt-button class="btn-mobile" type="primary" v-on:click="switchUI">注册</mt-button>
       </div>
-      <div class="login-container-mobile" v-else key="signup-mobile">
+      <div class="login-container-mobile" v-else key="signup-mobile"
+           v-loading="loading">
         <h2 class="login-title-mobile">注册</h2>
         <mt-field type="text" v-model="userInfo.email"
                   auto-complete="off" placeholder="邮箱"> </mt-field>
@@ -238,8 +240,6 @@ export default {
 
 .btn {
   width: 30%;
-  background: #505458;
-  border: none;
   margin: 10px 20px auto 20px;
 }
 

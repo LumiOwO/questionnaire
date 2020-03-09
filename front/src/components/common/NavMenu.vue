@@ -49,7 +49,6 @@
 <style>
 .menu {
   margin-top: -20px;
-  min-width: 1300px;
 }
 
 .welcome-title {
@@ -73,8 +72,6 @@
   position: absolute;
   margin-top: 12px;
   right: 2%;
-  background: #505458;
-  border: none;
 }
 .btn-custom-cancel {
   float: right;
