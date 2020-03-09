@@ -3,6 +3,7 @@ A java web for B/S course provides questionnaire service.
 
 ## 如何打包
 * 先把前端项目打包
+    * 部署到服务器上时，将main.js的baseURL中主机ip地址改为服务器ip地址
     * 在front文件夹下使用 npm run build
     * 将生成的static文件夹和index.html文件复制到后端项目的src/main/resources/static文件夹下
 * 再将后端项目打包

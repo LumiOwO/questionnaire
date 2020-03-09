@@ -2,7 +2,7 @@
   <div v-if="!isMobile">
     <!--PC端登录界面-->
     <transition name="slide-up" mode="out-in" key="login-UI">
-      <el-form v-if="!showSignupUI" key="login"
+      <el-form v-if="!showSignupUI" key="login" v-loading="loading"
                class="login-container" label-position="left" label-width="0px">
         <h3 class="login-title">登录</h3>
         <el-form-item>
@@ -19,20 +19,24 @@
         </el-form-item>
       </el-form>
 
-      <el-form v-else key="signup"
+      <el-form v-else key="signup" v-loading="loading"
                class="login-container" label-position="left" label-width="0px">
-        <h3 class="login_title">注册</h3>
+        <h3 class="signup-title">注册</h3>
         <el-form-item>
           <el-input type="text" v-model="userInfo.email" v-on:keyup.enter.native="signup"
-                    auto-complete="off" placeholder="邮箱"></el-input>
+                    auto-complete="off" placeholder="请输入您的邮箱"></el-input>
         </el-form-item>
         <el-form-item>
           <el-input type="text" v-model="userInfo.username" v-on:keyup.enter.native="signup"
-                    auto-complete="off" placeholder="昵称"></el-input>
+                    auto-complete="off" placeholder="请输入您的昵称"></el-input>
         </el-form-item>
         <el-form-item>
           <el-input type="password" v-model="userInfo.password" v-on:keyup.enter.native="signup"
-                    auto-complete="off" placeholder="密码"></el-input>
+                    auto-complete="off" placeholder="设置您的密码"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input type="password" v-model="userInfo.passwordAgain" v-on:keyup.enter.native="signup"
+                    auto-complete="off" placeholder="再次输入密码"></el-input>
         </el-form-item>
         <el-form-item style="width: 100%">
           <el-button class="btn" type="primary" v-on:click="signup">确定</el-button>
@@ -80,20 +84,33 @@ export default {
       userInfo: {
         username: '',
         password: '',
+        passwordAgain: '',
         email: ''
       },
       showSignupUI: false,
+      loading: false,
       isMobile: App.methods._isMobile()
     }
   },
   methods: {
     login () {
+      // 字段检查
+      if (!this.userInfo.email) {
+        this.alertError('输入的邮箱不能为空')
+        return
+      }
+      if (!this.userInfo.password) {
+        this.alertError('输入的密码不能为空')
+        return
+      }
+      this.switchLoading()
       this.$axios
         .post('/login', {
           email: this.userInfo.email,
           password: this.userInfo.password
         })
         .then(successResponse => {
+          this.switchLoading()
           if (successResponse.data.succeed) {
             this.$store.commit('login', successResponse.data)
             let path = this.$route.query.redirect
@@ -101,15 +118,33 @@ export default {
                 path === '/' || path === undefined ? '/index' : path})
           } else {
             this.alertError(successResponse.data.msg)
-              .catch(() => {})
           }
         })
         .catch(failResponse => {
-          this.alertError('未知错误')
-            .catch(() => {})
+          this.switchLoading()
+          this.alertError()
         })
     },
     signup () {
+      // 字段检查
+      if (!this.userInfo.email) {
+        this.alertError('输入的邮箱不能为空')
+        return
+      }
+      if (!this.userInfo.username) {
+        this.alertError('用户名不能为空')
+        return
+      }
+      if (!this.userInfo.password || !this.userInfo.passwordAgain) {
+        this.alertError('输入的密码不能为空')
+        return
+      }
+      if (this.userInfo.password !== this.userInfo.passwordAgain) {
+        this.alertError('两次输入的密码不同，请重试')
+        return
+      }
+
+      this.switchLoading()
       this.$axios
         .post('/signup', {
           username: this.userInfo.username,
@@ -117,18 +152,17 @@ export default {
           email: this.userInfo.email
         })
         .then(successResponse => {
+          this.switchLoading()
           if (successResponse.data.succeed) {
-            this.alertInfo(successResponse.data.msg)
-              .then(() => { this.switchUI() })
-              .catch(() => {})
+            this.alertInfo(successResponse.data.msg,
+              () => { this.switchUI() })
           } else {
             this.alertError(successResponse.data.msg)
-              .catch(() => {})
           }
         })
         .catch(failResponse => {
-          this.alertError('未知错误')
-            .catch(() => {})
+          this.switchLoading()
+          this.alertError()
         })
     },
     switchUI () {
@@ -139,28 +173,37 @@ export default {
         email: ''
       }
     },
+    switchLoading () {
+      this.loading = !this.loading
+    },
     alertError (msg) {
+      if (msg == null || msg.length === 0) {
+        msg = '未知错误'
+      }
       if (!this.isMobile) {
         // PC端
-        return this.$alert(msg, '错误', {
-          confirmButtonText: '确定',
-          type: 'error'
+        this.$message({
+          type: 'error',
+          message: msg
         })
       } else {
         // 移动端
-        return MessageBox.alert(msg, '错误')
+        MessageBox.alert(msg, '错误')
+          .catch(() => { })
       }
     },
-    alertInfo (msg) {
+    alertInfo (msg, then) {
       if (!this.isMobile) {
         // PC端
-        return this.$alert(msg, '提示', {
-          confirmButtonText: '确定',
-          type: 'info'
+        this.$message({
+          type: 'info',
+          message: msg
         })
       } else {
         // 移动端
-        return MessageBox.alert(msg, '提示')
+        MessageBox.alert(msg, '提示')
+          .then(then)
+          .catch(() => { })
       }
     }
   }
@@ -179,10 +222,18 @@ export default {
   box-shadow: 0 0 25px #cac6c6;
 }
 
-.login-title {
-  margin: 0 auto 40px auto;
+.login-title, .signup-title {
   text-align: center;
   color: #505458;
+  margin-bottom: 30px;
+}
+
+.signup-loading {
+  text-align: left;
+  color: #f00000;
+  margin-left: 8px;
+  margin-top: -2px;
+  margin-bottom: 10px;
 }
 
 .btn {

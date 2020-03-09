@@ -71,7 +71,7 @@
 
 .quit-btn {
   position: absolute;
-  margin-top: 10px;
+  margin-top: 12px;
   right: 2%;
   background: #505458;
   border: none;

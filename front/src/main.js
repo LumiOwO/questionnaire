@@ -9,7 +9,7 @@ import Mint from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import router from './router'
 
-// 设置反向代理，前端请求默认发送到 http://localhost:8080/api
+// 设置反向代理，前端请求默认发送到 baseURL
 let axios = require('axios')
 axios.defaults.baseURL = 'http://localhost:8080/api'
 Vue.prototype.$axios = axios
