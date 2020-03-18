@@ -1,7 +1,7 @@
 <template>
   <div v-if="!isMobile">
     <!--电脑端-->
-    <edit-form-p-c :form-data="formData"></edit-form-p-c>
+    <edit-form-p-c :formdata="formdata"></edit-form-p-c>
   </div>
 
   <div v-else>
@@ -13,10 +13,16 @@
 <script>
 import App from '../../App'
 import EditFormPC from './EditFormPC'
+import Form from './js/Form'
 
 export default {
   name: 'EditForm',
-  props: ['formData'],
+  props: {
+    formdata: {
+      type: Form,
+      default: () => { return new Form(false) }
+    }
+  },
   components: {EditFormPC},
   data () {
     return {

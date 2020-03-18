@@ -1,6 +1,6 @@
 <template>
   <div>
-    <edit-form :form-data="newform"></edit-form>
+    <edit-form></edit-form>
   </div>
 </template>
 
@@ -9,19 +9,17 @@ import EditForm from '@/components/form/EditForm'
 export default {
   name: 'NewForm',
   components: {EditForm},
-  data () {
-    return {
-      newform: {
-        title: '',
-        questions: [],
-        onceOnly: false,
-        userOnly: false,
-        repeatDaily: false,
-        published: false,
-        dueDate: Date.now() + 24 * 3600 * 1000,
-        dueTime: Date.now() + 24 * 3600 * 1000
-      }
-    }
+  beforeRouteLeave (to, from, next) {
+    this.$confirm('正在离开本页面，本页面内所有未保存数据都会丢失', '警告', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      cancelButtonClass: 'btn-custom-cancel',
+      type: 'warning'
+    }).then(() => {
+      next()
+    }).catch(() => {
+      next(false)
+    })
   }
 }
 </script>

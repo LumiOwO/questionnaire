@@ -150,4 +150,15 @@
   border: none;
 }
 
+.el-button--primary{
+  color: #fff;
+  background: #505458;
+  border: none;
+}
+.el-scrollbar__wrap{
+  overflow-x: hidden;
+}
+.el-textarea__inner {
+  font-family: Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
 </style>

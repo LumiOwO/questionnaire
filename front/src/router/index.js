@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Login from '@/components/Login'
-import Home from '@/components/Home'
-
 import AppIndex from '@/components/home/AppIndex'
 import NewForm from '@/components/home/NewForm'
 import MyForm from '@/components/home/MyForm'
+
+import Login from '@/components/Login'
+import Home from '@/components/Home'
 
 Vue.use(Router)
 
@@ -16,7 +16,10 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: Login,
+      meta: {
+        title: '登录'
+      }
     },
     {
       path: '/home',
@@ -27,24 +30,36 @@ export default new Router({
         {
           path: '/index',
           name: 'AppIndex',
-          component: AppIndex
+          component: AppIndex,
+          meta: {
+            title: '个人中心'
+          }
         },
         {
           path: '/newform',
           name: 'NewForm',
-          component: NewForm
+          component: NewForm,
+          meta: {
+            title: '新建表单'
+          }
         },
         {
           path: '/myform',
           name: 'MyForm',
-          component: MyForm
+          component: MyForm,
+          meta: {
+            title: '我的表单'
+          }
         }
       ]
     },
     {
       path: '*',
       name: 'default',
-      redirect: '/index'
+      redirect: '/index',
+      meta: {
+        title: '个人中心'
+      }
     }
   ]
 })

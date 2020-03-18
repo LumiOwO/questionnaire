@@ -19,12 +19,17 @@ Vue.use(ElementUI)
 Vue.use(Mint)
 
 router.beforeEach((to, from, next) => {
+  let pre = '调查问卷系统 - '
   if (to.path === '/login') {
+    document.title = pre + to.meta.title
     next()
   } else if (store.state.user.username) {
     if (to.path === '/' || to.path === undefined) {
       next({path: '/index'})
     } else {
+      let post = ' - ' + store.state.user.username
+      let mid = to.meta.title ? to.meta.title : '个人中心'
+      document.title = pre + mid + post
       next()
     }
   } else {
